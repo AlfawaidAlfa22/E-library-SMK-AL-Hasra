@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Buku extends Model
 {
+    use SoftDeletes;
+
     // Kalau nama tabel di database kamu 'bukus', Laravel otomatis mengenalinya.
     protected $fillable = [
         'judul',

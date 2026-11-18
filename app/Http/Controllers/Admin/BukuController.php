@@ -98,15 +98,26 @@ class BukuController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        $buku = Buku::findOrFail($id);
+{
+    $buku = Buku::findOrFail($id);
 
-        if ($buku->peminjamans()->exists()) {
-            return back()->with('error', 'Buku tidak dapat dihapus karena memiliki riwayat peminjaman.');
-        }
+    // Cegah penghapusan jika masih ada peminjaman aktif
+    $masihDipinjam = $buku->peminjamans()
+        ->whereIn('status', ['pending', 'dipinjam'])
+        ->exists();
 
-        $buku->delete();
+    if ($masihDipinjam) {
+        return back()->with(
+            'error',
+            'Buku tidak dapat dihapus karena masih memiliki pengajuan atau peminjaman aktif.'
+        );
+    }
 
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
+    $buku->delete();
+
+            return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
     }
 }
+
+ 
+

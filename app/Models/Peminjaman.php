@@ -26,6 +26,6 @@ class Peminjaman extends Model
     // Relasi ke Buku (Buku yang dipinjam)
     public function buku()
     {
-        return $this->belongsTo(Buku::class);
+     return $this->belongsTo(Buku::class)->withTrashed();
     }
 }
